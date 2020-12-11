@@ -1,0 +1,11 @@
+Me tocó el inciso 3 y esto ayudará a terminar la funcionalidad del programa.
+
+Siento debilidad en el tema de hilos porque me complico al tratar
+de entender su funcionamiento.
+
+Planeo incluir hilos para el llenado de la tabla de películas y 
+para el llenado del arbol de las claudilist.
+
+Un comentario hacia la instructora es que es la mejor de todas, me encantaron
+tus labs este periodo, siempre sos super clara al explicar y considerada al evaluar.
+Gracias por todo Clau! <3
