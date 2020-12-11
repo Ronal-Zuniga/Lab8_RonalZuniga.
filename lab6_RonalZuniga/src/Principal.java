@@ -33,6 +33,30 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         this.pack();
+        tb.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Nombre", "Puntuación", "Lanzamiento", "Tipo", "Género"
+                }
+        ) {
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        ht = new hiloTabla(tb);
+        ht.setProgramas(p);
+        
     }
 
     /**
@@ -79,7 +103,6 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tb = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
         delP = new javax.swing.JDialog();
         jPanel5 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
@@ -473,14 +496,6 @@ public class Principal extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(204, 0, 102));
         jLabel16.setText("Lista de Programas");
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton3.setText("Mostrar Programas");
-        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton3MouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -493,10 +508,6 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(312, Short.MAX_VALUE)
                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(307, 307, 307))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(347, 347, 347)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -505,9 +516,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jLabel16)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(jButton3)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout listPLayout = new javax.swing.GroupLayout(listP.getContentPane());
@@ -1584,6 +1593,7 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        //muestra la ventana de modificar ClaudiLists
         modC.setModal(true);
         modC.pack();
         modC.setLocationRelativeTo(this);
@@ -1591,6 +1601,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        //Agrega programas a un arraylist
         if (np.getText().isEmpty() || launch.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Campos vacíos, no se ha agregado el programa");
         } else {
@@ -1610,6 +1621,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        //muestra la ventana de agregar programas
         addP.setModal(true);
         addP.pack();
         addP.setLocationRelativeTo(this);
@@ -1617,6 +1629,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        //Permite modificar a un programa que ha sido agregado previamente
         if (np1.getText().isEmpty() || launch1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Campos vacíos, no se ha modificado el programa");
         } else {
@@ -1644,26 +1657,16 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        //muestra la ventana de modificar programas
         modP.setModal(true);
         modP.pack();
         modP.setLocationRelativeTo(this);
         modP.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        DefaultTableModel m = (DefaultTableModel) tb.getModel();
-        for (int i = 0; i < p.size(); i++) {
-            Object[] t = {
-                p.get(i).getNombre(), p.get(i).getPuntuacion(),
-                p.get(i).getLanzamiento(), p.get(i).getTipo(),
-                p.get(i).getGenero()
-            };
-            m.addRow(t);
-        }
-        tb.setModel(m);
-    }//GEN-LAST:event_jButton3MouseClicked
-
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        //muestra la ventana de listar programas
+        ht.run();
         listP.setModal(true);
         listP.pack();
         listP.setLocationRelativeTo(this);
@@ -1671,6 +1674,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        //Permite eliminar algun programa añadido anteriormente
         Programa pr = (Programa) prg1.getSelectedItem();
         for (int i = 0; i < p.size(); i++) {
             if (p.get(i).equals(pr)) {
@@ -1682,6 +1686,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        //muestra la ventana de eliminar programas
         delP.setModal(true);
         delP.pack();
         delP.setLocationRelativeTo(this);
@@ -1689,6 +1694,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        //Agrega programas a una claudiList
         Programa pr = (Programa) prg2.getSelectedItem();
         if (aux.contains(pr)) {
             JOptionPane.showMessageDialog(this, "No se puede agregar el mismo programa dos veces");
@@ -1703,6 +1709,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5MouseClicked
 
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        //Permite crear una nueva ClaudiList
         if (nc.getText().isEmpty() || aux.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Campos vacíos O aún no ha añadido programas a la lista\n"
                     + "La ClaudiList no se ha creado");
@@ -1720,6 +1727,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6MouseClicked
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        //muestra la ventana de agregar ClaudiLists
         addC.setModal(true);
         addC.pack();
         addC.setLocationRelativeTo(this);
@@ -1727,6 +1735,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
+        //Modifica programas que pertenecen a una claudiList
         Programa pr = (Programa) prg3.getSelectedItem();
         if (aux.contains(pr)) {
             JOptionPane.showMessageDialog(this, "No se puede agregar el mismo programa dos veces");
@@ -1741,6 +1750,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7MouseClicked
 
     private void jButton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton8MouseClicked
+        //Permite modificar una ClaudiList existente
         if (nc1.getText().isEmpty() || aux.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Campos vacíos O aún no ha añadido programas a la lista\n"
                     + "La ClaudiList no se ha modificado");
@@ -1762,6 +1772,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8MouseClicked
 
     private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+        //Muestra todas las claudilist en forma de arbol
         DefaultMutableTreeNode raiz
                 = new DefaultMutableTreeNode("ClaudiList");
         DefaultTreeModel modeloARBOL
@@ -1799,6 +1810,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9MouseClicked
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        //muestra la ventana donde se listan las claudilist
         listC.setModal(true);
         listC.pack();
         listC.setLocationRelativeTo(this);
@@ -1806,6 +1818,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        //muestra la ventana donde se guardan las claudilist
         svC.setModal(true);
         svC.pack();
         svC.setLocationRelativeTo(this);
@@ -1813,6 +1826,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jButton10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton10MouseClicked
+        //Permite eliminar alguna claudilist existente
         ClaudiList c = (ClaudiList) cdl1.getSelectedItem();
         for (int i = 0; i < cl.size(); i++) {
             if (cl.get(i).equals(c)) {
@@ -1823,6 +1837,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10MouseClicked
 
     private void jButton11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton11MouseClicked
+        //permite guardar un archivo con los datos de una claudilist seleccionada
         JFileChooser jfc = new JFileChooser();
         FileNameExtensionFilter filtro
                 = new FileNameExtensionFilter(
@@ -1863,6 +1878,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11MouseClicked
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        //muestra la ventana que permite borrar claudilist 
         delC.setModal(true);
         delC.pack();
         delC.setLocationRelativeTo(this);
@@ -1870,6 +1886,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        //muestra la ventana donde se administran los archivos
         arc.setModal(true);
         arc.pack();
         arc.setLocationRelativeTo(this);
@@ -1877,6 +1894,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jButton12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton12MouseClicked
+        //permite abrir un archivo y ver lo que contiene
         File fichero = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -1912,8 +1930,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton12MouseClicked
 
     private void jButton17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton17MouseClicked
-        ClaudiList c = new ClaudiList();
-        c.setArchivo(archivo);
+        //Permite agregar programas a un archivo
+        String path = archivo.getName();
+        adminClaudilist c = new adminClaudilist(path);
+        //c.setArchivo(archivo);
         c.cargarArchivo();
         if (np2.getText().isEmpty() || launch2.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Campos vacíos, no se ha agregado el programa");
@@ -1944,10 +1964,11 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton17MouseClicked
 
     private void jButton18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton18MouseClicked
+        //permite modificar programas de un archivo
         if (np3.getText().isEmpty() || launch3.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Campos vacíos, no se ha modificado el programa");
         } else {
-            ClaudiList c = new ClaudiList();
+            adminClaudilist c = new adminClaudilist();
             c.setArchivo(archivo);
             c.cargarArchivo();
             Programa pr = (Programa) prg4.getSelectedItem();
@@ -1966,7 +1987,6 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
             JOptionPane.showMessageDialog(this, "Programa modificado correctamente");
-            setProgramas();
             np3.setText("");
             launch3.setText("");
             ptp3.setValue(1);
@@ -1985,8 +2005,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton18MouseClicked
 
     private void jButton19MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton19MouseClicked
+        //permite eliminar programas de un archivo
         Programa pr = (Programa) prg5.getSelectedItem();
-        ClaudiList c = new ClaudiList();
+        adminClaudilist c = new adminClaudilist();
         c.setArchivo(archivo);
         c.cargarArchivo();
         for (int i = 0; i < c.getProgramas().size(); i++) {
@@ -2009,6 +2030,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton19MouseClicked
 
     private void jButton13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton13MouseClicked
+        //muestra la ventana de agregar programa
         addp.setModal(true);
         addp.pack();
         addp.setLocationRelativeTo(this);
@@ -2016,6 +2038,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton13MouseClicked
 
     private void jButton14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton14MouseClicked
+        //muestra la ventana de modificar programa
         modp.setModal(true);
         modp.pack();
         modp.setLocationRelativeTo(this);
@@ -2023,6 +2046,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton14MouseClicked
 
     private void jButton15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton15MouseClicked
+        //muestra la ventana de eliminar programa
         delp.setModal(true);
         delp.pack();
         delp.setLocationRelativeTo(this);
@@ -2030,6 +2054,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton15MouseClicked
 
     private void jButton16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton16MouseClicked
+        //permite guardar los cambios en un archivo
         JFileChooser jfc = new JFileChooser();
         FileNameExtensionFilter filtro
                 = new FileNameExtensionFilter(
@@ -2131,7 +2156,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -2252,8 +2276,9 @@ public class Principal extends javax.swing.JFrame {
     private ArrayList<Programa> aux = new ArrayList();
     private ArrayList<ClaudiList> cl = new ArrayList();
     private File archivo = null;
+    hiloTabla ht;
 
-    public void setProgramas() {
+    public void setProgramas() {//agrega el modelo de los combobox utilizados
         DefaultComboBoxModel m = new DefaultComboBoxModel();
         for (int i = 0; i < p.size(); i++) {
             m.addElement(p.get(i));
@@ -2264,7 +2289,7 @@ public class Principal extends javax.swing.JFrame {
         prg3.setModel(m);
     }
 
-    public void setListas() {
+    public void setListas() {//agrega el modelo de los combobox utilizados
         DefaultComboBoxModel m = new DefaultComboBoxModel();
         for (int i = 0; i < cl.size(); i++) {
             m.addElement(cl.get(i));
