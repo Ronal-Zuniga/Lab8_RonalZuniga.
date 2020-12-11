@@ -56,7 +56,9 @@ public class Principal extends javax.swing.JFrame {
         });
         ht = new hiloTabla(tb);
         ht.setProgramas(p);
+        ht.setRefresh(false);
         
+
     }
 
     /**
@@ -380,6 +382,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel15.setText("Seleccione Programa a Modificar");
 
         prg.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
+        prg.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                prgItemStateChanged(evt);
+            }
+        });
 
         type1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         type1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Anime", "Serie", "Documental", "Pelicula" }));
@@ -404,9 +411,9 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(ptp1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -415,9 +422,7 @@ public class Principal extends javax.swing.JFrame {
                                             .addComponent(np1, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(genero1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(prg, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(prg, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                             .addGap(238, 238, 238)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -730,6 +735,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel25.setText("Seleccionar ClaudiList A Modificar");
 
         cdl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        cdl.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cdlItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -1277,6 +1287,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel44.setText("Seleccione Programa a Modificar");
 
         prg4.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
+        prg4.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                prg4ItemStateChanged(evt);
+            }
+        });
 
         type3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         type3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Anime", "Serie", "Documental", "Pelicula" }));
@@ -1648,6 +1663,7 @@ public class Principal extends javax.swing.JFrame {
                     p.get(i).setGenero(gen);
                 }
             }
+            ht.setRefresh(true);
             JOptionPane.showMessageDialog(this, "Programa modificado correctamente");
             setProgramas();
             np1.setText("");
@@ -1666,7 +1682,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         //muestra la ventana de listar programas
-        ht.run();
+        if (flag) {
+            ht.start();
+            flag = false;
+        }
         listP.setModal(true);
         listP.pack();
         listP.setLocationRelativeTo(this);
@@ -2093,6 +2112,32 @@ public class Principal extends javax.swing.JFrame {
         }//fin IF
     }//GEN-LAST:event_jButton16MouseClicked
 
+    private void prgItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_prgItemStateChanged
+        //permite visualizar los datos de un programa antes de modificarlo
+        Programa p = (Programa) prg.getSelectedItem();
+        np1.setText(p.getNombre());
+        ptp1.setValue(p.getPuntuacion());
+        launch1.setText(Integer.toString(p.getLanzamiento()));
+        type1.setSelectedItem(p.getTipo());
+        genero1.setSelectedItem(p.getGenero());
+    }//GEN-LAST:event_prgItemStateChanged
+
+    private void cdlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cdlItemStateChanged
+        //permite visualizar los datos de una claudilist antes de modificarla
+        ClaudiList c = (ClaudiList) cdl.getSelectedItem();
+        nc1.setText(c.getNombre());
+    }//GEN-LAST:event_cdlItemStateChanged
+
+    private void prg4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_prg4ItemStateChanged
+        //permite visualizar los datos de un programa antes de modificarlo
+        Programa p = (Programa) prg4.getSelectedItem();
+        np3.setText(p.getNombre());
+        ptp3.setValue(p.getPuntuacion());
+        launch3.setText(Integer.toString(p.getLanzamiento()));
+        type3.setSelectedItem(p.getTipo());
+        genero3.setSelectedItem(p.getGenero());
+    }//GEN-LAST:event_prg4ItemStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -2122,6 +2167,7 @@ public class Principal extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Principal().setVisible(true);
             }
@@ -2277,6 +2323,7 @@ public class Principal extends javax.swing.JFrame {
     private ArrayList<ClaudiList> cl = new ArrayList();
     private File archivo = null;
     hiloTabla ht;
+    boolean flag = true;
 
     public void setProgramas() {//agrega el modelo de los combobox utilizados
         DefaultComboBoxModel m = new DefaultComboBoxModel();
